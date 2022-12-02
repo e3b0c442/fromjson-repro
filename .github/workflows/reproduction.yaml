@@ -10,7 +10,8 @@ env:
         "provider": [
           "analyze-api"
         ]
-      }
+      },
+      "service": "analyze-api"
     }
 jobs:
   parse:
