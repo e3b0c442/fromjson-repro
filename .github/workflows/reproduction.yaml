@@ -1,0 +1,23 @@
+on:
+  workflow_call:
+    
+jobs:
+  parse:
+    outputs: 
+      array: ${{ steps.parse.outputs.array }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Parse
+        id: parse
+        run: |
+          echo 'array=["one","two","three"]' >> $GITHUB_OUTPUT
+  use:
+    needs: [ parse ]
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        item: ${{ fromJSON(needs.parse.outputs.array) }}
+    steps:
+      - name: Use
+        run: echo ${{ matrix.item }}
