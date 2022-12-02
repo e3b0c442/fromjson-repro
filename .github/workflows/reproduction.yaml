@@ -28,7 +28,7 @@ jobs:
 
           echo "stack=$(echo $CONFIG | jq -r '.stack')" >> $GITHUB_OUTPUT
           echo "consumers=$(echo $CONFIG | jq -c '.pacticipants.consumer')" >> $GITHUB_OUTPUT
-          echo "providers=$(echo $CONFIG | jq -c '.pacticipants.provider')" >> $GITHUB_OUTPUT  use:
+          echo "providers=$(echo $CONFIG | jq -c '.pacticipants.provider')" >> $GITHUB_OUTPUT
   
   use:
     needs: [ parse ]
