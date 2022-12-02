@@ -1,5 +1,9 @@
 on:
-  workflow_dispatch:
+  workflow_call:
+    inputs:
+      service_config:
+        required: true
+        type: string
   
 env: 
   CONFIG: |
@@ -20,6 +24,8 @@ jobs:
       consumers: ${{ steps.parse.outputs.consumers }}
       providers: ${{ steps.parse.outputs.providers }}
     runs-on: ubuntu-latest
+    env:
+      CONFIG: ${{ inputs.service_config }}
     steps:
       - name: Parse
         id: parse

@@ -1,0 +1,20 @@
+on:
+  workflow_dispatch:
+
+env:
+  service_config: |
+    {
+      "stack": "go",
+      "pacticipants": {
+        "consumer": [],
+        "provider": [
+          "analyze-api"
+        ]
+      },
+      "service": "analyze-api"
+    }
+jobs:
+  start:
+    uses: ./.github/workflows/reproduction.yaml
+    with:
+      service_config: ${{ env.service_config }}
