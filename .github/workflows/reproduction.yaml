@@ -1,6 +1,15 @@
 on:
   workflow_dispatch:
-    
+  
+env: 
+  INPUT: |
+    {
+      "array": [
+        "one",
+        "two",
+        "three"
+      ]
+    }
 jobs:
   parse:
     outputs: 
@@ -10,7 +19,7 @@ jobs:
       - name: Parse
         id: parse
         run: |
-          echo 'array=["one","two","three"]' >> $GITHUB_OUTPUT
+          echo "array=$(echo ${{ INPUT }} | jq -r '.array')" >> $GITHUB_OUTPUT
   use:
     needs: [ parse ]
     runs-on: ubuntu-latest
