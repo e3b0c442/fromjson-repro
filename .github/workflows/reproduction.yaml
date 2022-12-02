@@ -38,3 +38,13 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - run: echo "Running check for ${{ matrix.provider }}"
+
+  call:
+    needs: [ parse ]
+    strategy:
+      fail-fast: false
+      matrix:
+        provider: ${{ fromJSON(needs.parse.outputs.providers) }}
+    uses: ./.github/workflows/called.yaml
+    with:
+      provider: ${{ matrix.provider }}

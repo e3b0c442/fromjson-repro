@@ -1,0 +1,12 @@
+on:
+  workflow_call:
+    inputs:
+      provider:
+        required: true
+        type: string
+
+jobs:
+  run:
+    runs-on: ubuntu-22.04
+    steps:
+      - run: echo "Running check for ${{ inputs.provider }}"
