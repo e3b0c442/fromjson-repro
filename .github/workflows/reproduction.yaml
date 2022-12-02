@@ -6,17 +6,7 @@ on:
         type: string
   
 env: 
-  CONFIG: |
-    {
-      "stack": "go",
-      "pacticipants": {
-        "consumer": [],
-        "provider": [
-          "analyze-api"
-        ]
-      },
-      "service": "analyze-api"
-    }
+  CONFIG: ${{ inputs.service_config }}
 jobs:
   parse:
     outputs: 

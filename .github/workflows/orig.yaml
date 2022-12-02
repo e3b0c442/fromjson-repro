@@ -2,7 +2,7 @@ on:
   workflow_dispatch:
 
 env:
-  service_config: |
+  CONFIG: |
     {
       "stack": "go",
       "pacticipants": {
@@ -13,8 +13,22 @@ env:
       },
       "service": "analyze-api"
     }
+
 jobs:
   start:
+    outputs:
+      config: ${{ steps.parse.outputs.config }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Parse
+        id: parse
+        run: |
+          set -x
+
+          echo "config=$(echo $CONFIG | jq -c '.')" >> $GITHUB_OUTPUT
+  call:
+    needs: [ start ]
     uses: ./.github/workflows/reproduction.yaml
     with:
-      service_config: ${{ env.service_config }}
+      service_config: ${{ needs.start.outputs.config }}
+  
