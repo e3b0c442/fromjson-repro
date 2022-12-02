@@ -4,29 +4,37 @@ on:
 env: 
   INPUT: |
     {
-      "array": [
-        "one",
-        "two",
-        "three"
-      ]
+      "stack": "go",
+      "pacticipants": {
+        "consumer": [],
+        "provider": [
+          "analyze-api"
+        ]
+      }
     }
 jobs:
   parse:
     outputs: 
-      array: ${{ steps.parse.outputs.array }}
+      stack: ${{ steps.parse.outputs.stack }}
+      consumers: ${{ steps.parse.outputs.consumers }}
+      providers: ${{ steps.parse.outputs.providers }}
     runs-on: ubuntu-latest
     steps:
       - name: Parse
         id: parse
         run: |
-          echo "array=$(echo $INPUT | jq -c '.array')" >> $GITHUB_OUTPUT
+          set -x
+
+          echo "stack=$(echo $CONFIG | jq -r '.stack')" >> $GITHUB_OUTPUT
+          echo "consumers=$(echo $CONFIG | jq -c '.pacticipants.consumer')" >> $GITHUB_OUTPUT
+          echo "providers=$(echo $CONFIG | jq -c '.pacticipants.provider')" >> $GITHUB_OUTPUT  use:
+  
   use:
     needs: [ parse ]
-    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        item: ${{ fromJSON(needs.parse.outputs.array) }}
+        provider: ${{ fromJSON(needs.parse.outputs.providers) }}
+    runs-on: ubuntu-22.04
     steps:
-      - name: Use
-        run: echo ${{ matrix.item }}
+      - run: echo "Running check for ${{ matrix.provider }}"
